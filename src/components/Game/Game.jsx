@@ -6,18 +6,19 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
 
   return (
-    <div>
-      <div>
+    <div className="backdrop">
+      <div className="modal">
         <h3>確認刪除</h3>
         <p>{message}</p>
-        <div>
-          <button onClick={onClose}>取消</button>
-          <button onClick={onConfirm}>確認刪除</button>
+        <div className="button-container">
+          <button onClick={onClose} className="cancel-button">取消</button>
+          <button onClick={onConfirm} className="confirm-button">確認刪除</button>
         </div>
       </div>
     </div>
   );
 };
+
 
 const Game = () => {
   const navigate = useNavigate();
@@ -71,7 +72,7 @@ const Game = () => {
       });
 
       if (!response.ok) throw new Error('Failed to create game');
-      
+
       await fetchGames();
       setNewGame({ gameName: '', creditNeeded: '', ticketWon: '' });
     } catch (err) {
@@ -92,7 +93,7 @@ const Game = () => {
       });
 
       if (!response.ok) throw new Error('Failed to update game');
-      
+
       await fetchGames();
       setEditingGame(null);
     } catch (err) {
@@ -108,7 +109,7 @@ const Game = () => {
       });
 
       if (!response.ok) throw new Error('Failed to delete game');
-      
+
       await fetchGames();
       setDeleteGameNumber(null);
     } catch (err) {
@@ -125,13 +126,13 @@ const Game = () => {
     <div>
       <h2>遊戲設定</h2>
       <button onClick={() => navigate('/')}>返回首頁</button>
-      
+
       {/* New Game Form */}
       <div>
         <h3>新增遊戲</h3>
         <form onSubmit={handleNewGameSubmit}>
           <div>
-          {/* <input
+            {/* <input
               type="number"
               placeholder="遊戲編號"
               value={newGame.gameNumber}
@@ -143,21 +144,21 @@ const Game = () => {
               type="text"
               placeholder="遊戲名稱"
               value={newGame.gameName}
-              onChange={(e) => setNewGame({...newGame, gameName: e.target.value})}
+              onChange={(e) => setNewGame({ ...newGame, gameName: e.target.value })}
               required
             />
             <input
               type="number"
               placeholder="所需代碼"
               value={newGame.creditNeeded}
-              onChange={(e) => setNewGame({...newGame, creditNeeded: e.target.value})}
+              onChange={(e) => setNewGame({ ...newGame, creditNeeded: e.target.value })}
               required
             />
             <input
               type="number"
               placeholder="贏得的票券"
               value={newGame.ticketWon}
-              onChange={(e) => setNewGame({...newGame, ticketWon: e.target.value})}
+              onChange={(e) => setNewGame({ ...newGame, ticketWon: e.target.value })}
               required
             />
             <button type="submit">確認新增</button>
@@ -186,7 +187,7 @@ const Game = () => {
                     <input
                       type="text"
                       value={editingGame.gameName}
-                      onChange={(e) => setEditingGame({...editingGame, gameName: e.target.value})}
+                      onChange={(e) => setEditingGame({ ...editingGame, gameName: e.target.value })}
                     />
                   ) : game.gameName}
                 </td>
@@ -195,7 +196,7 @@ const Game = () => {
                     <input
                       type="number"
                       value={editingGame.creditNeeded}
-                      onChange={(e) => setEditingGame({...editingGame, creditNeeded: e.target.value})}
+                      onChange={(e) => setEditingGame({ ...editingGame, creditNeeded: e.target.value })}
                     />
                   ) : game.creditNeeded}
                 </td>
@@ -204,20 +205,25 @@ const Game = () => {
                     <input
                       type="number"
                       value={editingGame.ticketWon}
-                      onChange={(e) => setEditingGame({...editingGame, ticketWon: e.target.value})}
+                      onChange={(e) => setEditingGame({ ...editingGame, ticketWon: e.target.value })}
                     />
                   ) : game.ticketWon}
                 </td>
                 <td>
                   {editingGame?.gameNumber === game.gameNumber ? (
                     <div>
-                      <button onClick={handleUpdateGame}>Save</button>
-                      <button onClick={() => setEditingGame(null)}>Cancel</button>
+                      <button onClick={handleUpdateGame}>儲存</button>
+                      <button onClick={() => setEditingGame(null)}>取消</button>
                     </div>
                   ) : (
                     <div>
-                      <button onClick={() => setEditingGame(game)}>Edit</button>
-                      <button onClick={() => setDeleteGameNumber(game.gameNumber)}>Delete</button>
+                      <button onClick={() => {
+                        console.log('Editing game:', game); // Debug log here
+                        setEditingGame(game);
+                      }}>
+                        編輯
+                      </button>
+                      <button onClick={() => setDeleteGameNumber(game.gameNumber)}>刪除</button>
                     </div>
                   )}
                 </td>

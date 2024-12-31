@@ -5,13 +5,28 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center">
-      <div className="bg-white p-6 rounded-lg">
-        <h3 className="text-lg font-bold mb-4">確認</h3>
-        <p className="mb-4">{message}</p>
-        <div className="flex justify-end gap-4">
-          <button onClick={onClose} className="px-4 py-2 bg-gray-200 rounded">取消</button>
-          <button onClick={onConfirm} className="px-4 py-2 bg-red-500 text-white rounded">確認</button>
+    <div className="backdrop">
+      <div className="modal">
+        <h3>確認刪除</h3>
+        <p>{message}</p>
+        <div className="button-container">
+          <button onClick={onClose} className="cancel-button">取消</button>
+          <button onClick={onConfirm} className="confirm-button">確認刪除</button>
+        </div>
+      </div>
+    </div>
+  );
+};
+const ErrorDialog = ({ message, onClose }) => {
+  if (!message) return null;
+
+  return (
+    <div className="backdrop">
+      <div className="modal error-modal">
+        <h3>錯誤提示</h3>
+        <p>{message}</p>
+        <div className="button-container">
+          <button onClick={onClose} className="ok-button">確定</button>
         </div>
       </div>
     </div>
@@ -45,6 +60,7 @@ const Card = () => {
       setLoading(false);
     }
   };
+
   const getNextCardNumber = () => {
     if (cards.length === 0) return 1;
     const maxCardNumber = Math.max(...cards.map(card => parseInt(card.cardId)));
@@ -81,7 +97,7 @@ const Card = () => {
 
   const addCredits = async (cardId, amount) => {
     try {
-      const response = await fetch(`http://localhost:8080/api/cards/${cardId}`, {
+      const response = await fetch(`http://localhost:8080/api/cards/${cardId}/increment`, {
         method: 'PUT',
         headers: {
           'Content-Type': 'application/json',
@@ -107,8 +123,13 @@ const Card = () => {
   const decrementCredits = async (cardId, amount) => {
     try {
       const card = cards.find(c => c.cardId === cardId);
+      if (!amount || isNaN(amount) || amount <= 0) {
+        setError('請輸入有效的代碼數量');
+        return;
+      }
+      
       if (card.creditBalance < amount) {
-        setError('積分不足');
+        setError('代碼不足');
         return;
       }
 
@@ -128,9 +149,10 @@ const Card = () => {
       setCards(cards.map(card => 
         card.cardId === cardId ? updatedCard : card
       ));
+      setCreditAmounts(prev => ({ ...prev, [cardId]: '' }));
       setError(null);
     } catch (err) {
-      setError('Failed to decrement credits. Please try again.');
+      setError('減少代碼失敗，請稍後再試。');
     }
   };
 
@@ -159,81 +181,69 @@ const Card = () => {
     }));
   };
 
-  const handleCustomCredits = (cardId) => {
+  const handleCustomCredits = (cardId, operation) => {
     const amount = creditAmounts[cardId];
     if (amount && !isNaN(amount) && parseInt(amount) > 0) {
-      addCredits(cardId, parseInt(amount));
+      if (operation === 'add') {
+        addCredits(cardId, parseInt(amount));
+      } else if (operation === 'decrease') {
+        decrementCredits(cardId, parseInt(amount));
+      }
     }
   };
 
   if (loading) {
     return (
-      <div className="flex items-center justify-center min-h-screen">
-        <p className="text-xl text-gray-600">Loading cards...</p>
+      <div>
+        <p>Loading cards...</p>
       </div>
     );
   }
 
   return (
-    <div className="p-8 max-w-6xl mx-auto">
-      <div className="flex justify-between items-center mb-8">
-        <h1 className="text-3xl font-bold">遊戲卡管理</h1>
-        <div className="space-x-4">
+    <div>
+      <div>
+        <h1>遊戲卡管理</h1>
+        <div>
           <button onClick={() => navigate('/')}>返回首頁</button>
           <button onClick={addNewCard}>新增遊戲卡</button>
         </div>
       </div>
 
-      {error && (
-        <div>
-          {error}
-        </div>
-      )}
-
-      <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+      <div>
         {cards.map(card => (
-          <div key={card.cardId} className="card border rounded-lg p-6 bg-white shadow">
-            <div className="flex justify-between items-center mb-4">
-              <h3 className="text-xl font-bold">Card #{card.cardId}</h3>
-              <button 
-                onClick={() => setDeleteCardId(card.cardId)}
-                className="text-red-500 hover:text-red-700"
-              >
-                刪除
-              </button>
-            </div>
-            
-            <div className="space-y-2 mb-4">
-              <div className="flex justify-between">
-                <span>積分:</span>
+          <div key={card.cardId} className="card">
+            <div>
+              <h3>Card #{card.cardId}</h3>
+              <button onClick={() => setDeleteCardId(card.cardId)}>刪除</button>
+            </div>        
+            <div>
+              <div>
+                <span>代碼:</span>
                 <span>{card.creditBalance}</span>
-              </div>
-              <div className="flex justify-between">
+                <span>&nbsp;&nbsp;</span>
                 <span>票券:</span>
                 <span>{card.ticketBalance}</span>
               </div>
             </div>
 
-            <div className="space-y-4">
-              <div className="grid grid-cols-2 gap-2">
-                <button onClick={() => addCredits(card.cardId, 5)}>加入 5 積分</button>
-                <button onClick={() => addCredits(card.cardId, 10)}>加入 10 積分</button>
-                <button onClick={() => decrementCredits(card.cardId, 5)}>減少 5 積分</button>
-                <button onClick={() => decrementCredits(card.cardId, 10)}>減少 10 積分</button>
+            <div>
+              <div>
+                <button onClick={() => addCredits(card.cardId, 1)}>加入代碼</button>
+                <button onClick={() => decrementCredits(card.cardId, 1)}>減少代碼</button>
               </div>
               
-              <div className="flex space-x-2">
+              <div>
                 <input
                   type="number"
                   value={creditAmounts[card.cardId] || ''}
                   onChange={(e) => handleCreditAmountChange(card.cardId, e.target.value)}
-                  placeholder="輸入積分"
+                  placeholder="輸入代碼"
                   min="1"
-                  className="flex-1"
                 />
-                <button onClick={() => handleCustomCredits(card.cardId)}>加入</button>
+                <button onClick={() => handleCustomCredits(card.cardId, 'add')}>加入</button>
+                <button onClick={() => handleCustomCredits(card.cardId, 'decrease')}>減少</button>
               </div>
-              
             </div>
           </div>
         ))}
@@ -245,6 +255,11 @@ const Card = () => {
         onConfirm={() => deleteCard(deleteCardId)}
         message="確定要刪除此遊戲卡嗎？此操作無法復原。"
       />
+       <ErrorDialog
+        message={error}
+        onClose={() => setError(null)}
+      />
+
     </div>
   );
 };

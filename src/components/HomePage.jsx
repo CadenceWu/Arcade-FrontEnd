@@ -2,7 +2,7 @@ import React from 'react';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
 import arcadeImg from './Arcade.jpg'
-import gameCard from './Card/GameCard.svg'
+import gameCard from './GameCard.svg'
 import PlayGame from './PlayGame.svg'
 
 const HomePage = () => {

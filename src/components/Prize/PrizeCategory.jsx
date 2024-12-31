@@ -5,13 +5,13 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
 
   return (
-    <div>
-      <div>
+    <div className="backdrop">
+      <div className="modal">
         <h3>確認刪除</h3>
         <p>{message}</p>
-        <div>
-          <button onClick={onClose}>取消</button>
-          <button onClick={onConfirm}>確認刪除</button>
+        <div className="button-container">
+          <button onClick={onClose} className="cancel-button">取消</button>
+          <button onClick={onConfirm} className="confirm-button">確認刪除</button>
         </div>
       </div>
     </div>
@@ -183,7 +183,7 @@ const PrizePage = () => {
               <th>獎品名稱</th>
               <th>所需兌換票券</th>
               <th>剩餘數量</th>
-              <th>Actions</th>
+              <th></th>
             </tr>
           </thead>
           <tbody>
@@ -220,13 +220,13 @@ const PrizePage = () => {
                 <td>
                 {editingPrize?.prizeNumber === prize.prizeNumber ? (
                     <div>
-                      <button onClick={handleUpdatePrize}>Save</button>
-                      <button onClick={() => setEditingPrize(null)}>Cancel</button>
+                      <button onClick={handleUpdatePrize}>儲存</button>
+                      <button onClick={() => setEditingPrize(null)}>取消</button>
                     </div>
                   ) : (
                   <div>
-                    <button onClick={() => setEditingPrize(prize)}>Edit</button>
-                    <button onClick={() => setDeletePrizeNumber(prize.prizeNumber)}>Delete</button>
+                    <button onClick={() => setEditingPrize(prize)}>編輯</button>
+                    <button onClick={() => setDeletePrizeNumber(prize.prizeNumber)}>刪除</button>
                   </div>
                   )}
                 </td>

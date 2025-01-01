@@ -1,11 +1,13 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import './HomePage.css';
-import arcadeImg from './Arcade.jpg'
-import gameCard from './GameCard.svg'
-import PlayGame from './PlayGame.svg'
+import arcadeImg from './Arcade.jpg';
+import gameCard from './GameCard.svg';
+import PlayGame from './PlayGame.svg';
 
 const HomePage = () => {
+  const [userRole, setUserRole] = useState('user'); // Default role is 'user'
+
   const MenuSection = ({ title, children }) => (
     <div className="menu-section">
       <h2 className="menu-title">{title}</h2>
@@ -25,17 +27,34 @@ const HomePage = () => {
         <h1 className="home-title">歡迎來到遊戲場</h1>
       </header>
 
-      <div className="home-content">
-        <MenuSection title="系統管理">
-          <PrimaryButton to="/games">
-            遊戲設定
-          </PrimaryButton>
-          <PrimaryButton to="/prizes">
-            獎品設定
-          </PrimaryButton>
-          <img src={arcadeImg} className="arcade-image" alt="Arcade" />
-        </MenuSection>
+      {/* Role Selection Section */}
+      <div className="role-selector">
+        <label htmlFor="role">選擇您的角色:</label>
+        <select
+          id="role"
+          value={userRole}
+          onChange={(e) => setUserRole(e.target.value)}
+        >
+          <option value="user">一般使用者</option>
+          <option value="admin">系統管理員</option>
+        </select>
+      </div>
 
+      <div className="home-content">
+        {/* Admin Section */}
+        {userRole === 'admin' && (
+          <MenuSection title="系統管理">
+            <PrimaryButton to="/games">
+              遊戲設定
+            </PrimaryButton>
+            <PrimaryButton to="/prizes">
+              獎品設定
+            </PrimaryButton>
+            <img src={arcadeImg} className="arcade-image" alt="Arcade" />
+          </MenuSection>
+        )}
+
+        {/* Game Card Section */}
         <MenuSection title="遊戲卡設定">
           <PrimaryButton to="/cards">
             新增遊戲卡、儲值
@@ -49,6 +68,7 @@ const HomePage = () => {
           <img src={gameCard} className="arcade-image" alt="Game Card" />
         </MenuSection>
 
+        {/* Gameplay Section */}
         <MenuSection title="遊戲操作、獎品兌換">
           <PrimaryButton to="/playGame">
             選擇遊戲

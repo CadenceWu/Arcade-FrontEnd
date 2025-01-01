@@ -45,7 +45,7 @@ const HomePage = () => {
         {userRole === 'admin' && (
           <MenuSection title="系統管理">
             <PrimaryButton to="/games">
-              設定遊戲
+              遊戲設定
             </PrimaryButton>
             <PrimaryButton to="/prizes">
               獎品設定

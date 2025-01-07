@@ -1,81 +1,133 @@
-/* HomePage.css */
-
-/* General Page Styles */
+/* General Styles */
 body {
-  font-family: Arial, sans-serif;
+  font-family: 'Press Start 2P', cursive, sans-serif; /* Arcade-style font */
   margin: 0;
   padding: 0;
-  background-color: #b2b256;
-  color: #333;
+  background-color: #202c2c; /* Darker, arcade-like background */
+  color: #fff;
+  line-height: 1.6;
 }
 
 .home-page {
   padding: 20px;
+  max-width: 1200px;
+  margin: auto;
 }
 
+/* Header Styles */
 .home-header {
   text-align: center;
-  margin-bottom: 30px;
+  margin-bottom: 40px;
 }
 
 .home-title {
-  font-size: 2.5em;
-  color: #322929;
+  font-size: 4em;
+  font-weight: bold;
+  color: #0ff; /* Neon-like color */
   margin-bottom: 10px;
+  text-shadow: 0 0 20px rgba(0, 255, 255, 0.6); /* Glow effect */
+  letter-spacing: 2px;
+}
+
+/* Role Selector Styles */
+.role-selector {
+  margin-bottom: 30px;
+  text-align: center;
+}
+
+.role-selector label {
+  font-size: 1.4em;
+  color: #fff;
+}
+
+.role-selector select {
+  margin-left: 10px;
+  padding: 10px;
+  font-size: 1.2em;
+  border: 2px solid #0ff; /* Neon border */
+  border-radius: 5px;
+  background-color: #333;
+  color: #0ff;
+  transition: border-color 0.3s ease;
+}
+
+.role-selector select:focus {
+  border-color: #f39c12; /* Focus border color */
+  outline: none;
 }
 
 /* Menu Section Styles */
 .menu-section {
-  margin-bottom: 20px;
-  padding: 15px;
-  border: 1px solid #ddd;
+  margin-bottom: 30px;
+  padding: 20px;
+  border: 2px solid #0ff; /* Neon border */
   border-radius: 10px;
-  background-color: #fff;
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
-  
+  background: linear-gradient(to bottom, #111, #444);
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.7); /* Glowing effect */
 }
 
 .menu-title {
-  font-size: 1.5em;
-  color: #555;
-  margin-bottom: 10px;
+  font-size: 2em;
+  color: #fff;
+  margin-bottom: 15px;
+  font-weight: bold;
+  border-bottom: 2px solid #0ff;
+  padding-bottom: 10px;
+  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
 }
 
 .menu-buttons {
   display: flex;
   flex-wrap: wrap;
-  gap: 10px;
+  gap: 15px;
+  margin-top: 10px;
 }
 
 /* Button Styles */
 .primary-button {
-  padding: 10px 20px;
-  font-size: 1em;
+  padding: 12px 25px;
+  font-size: 1.1em;
   font-weight: bold;
   color: #fff;
-  background-color: hsl(197, 100%, 58%);
-  border: none;
-  border-radius: 5px;
+  background-color: #f39c12; /* Neon yellow */
+  border: 2px solid #0ff;
+  border-radius: 8px;
   cursor: pointer;
-  transition: background-color 0.3s ease;
+  transition: transform 0.3s, background-color 0.3s ease, box-shadow 0.3s;
   display: inline-block;
-  text-decoration: none; /* Remove default link underline */
+  text-decoration: none;
+  box-shadow: 0 0 10px rgba(255, 165, 0, 0.6); /* Glowing effect */
 }
 
 .primary-button:hover {
-  background-color: hsl(197, 80%, 50%);
+  background-color: #e74c3c; /* Hover with red glow */
+  transform: translateY(-3px); /* More pronounced lift effect */
+  box-shadow: 0 0 20px rgba(231, 76, 60, 0.8); /* Hover glowing effect */
 }
 
 .primary-button:active {
-  background-color: hsl(197, 80%, 40%);
+  background-color: #c0392b;
+  transform: translateY(1px);
 }
 
 .primary-button:disabled {
   background-color: #ccc;
   cursor: not-allowed;
+  box-shadow: none;
 }
+
+/* Image Styles */
 .arcade-image {
-  width: 100px; /* Set a smaller width for the image */
-  height: auto; /* Maintain aspect ratio */
-  border-radius: 8px; /* Optional: Add rounded corners */
+  width: 60px; /* Larger image */
+  height: auto;
+  margin-left: 10px;
+  border-radius: 8px;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.8); /* Glowing effect */
+}
+
+/* Align title and image horizontally */
+.title-with-image {
+  display: flex;
+  align-items: center;
+  gap: 20px;
 }

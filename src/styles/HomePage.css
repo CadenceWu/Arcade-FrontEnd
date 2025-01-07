@@ -16,18 +16,40 @@ body {
 
 /* Header Styles */
 .home-header {
+  position: relative; /* Set relative positioning to control child absolute positioning */
+  height: 150px; /* Adjust height for vertical centering */
+  display: flex;
+  justify-content: center; /* Center title horizontally */
+  align-items: center; /* Center title vertically */
   text-align: center;
-  margin-bottom: 40px;
 }
 
 .home-title {
   font-size: 4em;
   font-weight: bold;
   color: #0ff; /* Neon-like color */
-  margin-bottom: 10px;
   text-shadow: 0 0 20px rgba(0, 255, 255, 0.6); /* Glow effect */
   letter-spacing: 2px;
+  margin: 0; /* Remove default margin */
 }
+
+/* Header Content Container */
+.header-content {
+  display: flex;
+  align-items: center; /* Vertically align title and image */
+  justify-content: center; /* Center the content */
+  gap: 20px; /* Space between title and image */
+  position: relative;
+}
+
+/* Header Image */
+.header-image {
+  width: 100px; /* Adjust width as needed */
+  height: auto; /* Maintain aspect ratio */
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.8); /* Optional glowing effect */
+  margin-right:0px;
+}
+
 
 /* Role Selector Styles */
 .role-selector {
@@ -58,29 +80,27 @@ body {
 
 /* Menu Section Styles */
 .menu-section {
+  display: flex;
+  align-items: center;
   margin-bottom: 30px;
   padding: 20px;
-  border: 2px solid #0ff; /* Neon border */
+  border: 2px solid #0ff;
   border-radius: 10px;
   background: linear-gradient(to bottom, #111, #444);
-  box-shadow: 0 0 20px rgba(0, 255, 255, 0.7); /* Glowing effect */
+  box-shadow: 0 0 20px rgba(0, 255, 255, 0.7);
+  gap: 20px; /* Reduce space between the title-with-image and buttons */
 }
 
-.menu-title {
-  font-size: 2em;
-  color: #fff;
-  margin-bottom: 15px;
-  font-weight: bold;
-  border-bottom: 2px solid #0ff;
-  padding-bottom: 10px;
-  text-shadow: 0 0 10px rgba(0, 255, 255, 0.8);
+.title-with-image {
+  display: flex;
+  align-items: center;
+  gap: 10px; /* Less space between title and image */
 }
 
 .menu-buttons {
   display: flex;
-  flex-wrap: wrap;
-  gap: 15px;
-  margin-top: 10px;
+  gap: 10px; /* Less space between buttons */
+  flex-wrap: wrap; /* Allow buttons to wrap if needed */
 }
 
 /* Button Styles */
@@ -122,12 +142,12 @@ body {
   height: auto;
   margin-left: 10px;
   border-radius: 8px;
-  box-shadow: 0 0 10px rgba(0, 255, 255, 0.8); /* Glowing effect */
+  box-shadow: 0 0 10px #00ffffcc; /* Glowing effect */
 }
 
 /* Align title and image horizontally */
 .title-with-image {
   display: flex;
   align-items: center;
-  gap: 20px;
+  gap: 20px; /* Space between title and image */
 }

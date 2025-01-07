@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
-import './HomePage.css';
+import '../styles/HomePage.css';
 import arcadeImg from './Arcade.jpg';
 import gameCard from './GameCard.svg';
 import PlayGame from './PlayGame.svg';
+import ArcadeMachine from './ArcadeMachine.svg';
 
 const HomePage = () => {
   const [userRole, setUserRole] = useState('user'); // Default role is 'user'
@@ -27,7 +28,10 @@ const HomePage = () => {
   return (
     <div className="home-page">
       <header className="home-header">
-        <h1 className="home-title">歡迎來到遊戲場</h1>
+        <div className="header-content">
+          <h1 className="home-title">歡迎來到遊戲場</h1>
+          <img src={ArcadeMachine} alt="Arcade Machine" className="header-image" />
+        </div>
       </header>
 
       {/* Role Selection Section */}

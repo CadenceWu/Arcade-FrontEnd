@@ -1,18 +1,19 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from '../../styles/Setting.module.css';
 
 // Custom Dialog Component
 const ConfirmDialog = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="backdrop">
-      <div className="modal">
+    <div className={styles.backdrop}>
+      <div className={styles.modal}>
         <h3>確認刪除</h3>
         <p>{message}</p>
-        <div className="button-container">
-          <button onClick={onClose} className="cancel-button">取消</button>
-          <button onClick={onConfirm} className="confirm-button">確認刪除</button>
+        <div className={styles['button-container']}>
+          <button onClick={onClose} className={styles['cancel-button']}>取消</button>
+          <button onClick={onConfirm} className={styles['confirm-button']}>確認刪除</button>
         </div>
       </div>
     </div>
@@ -123,29 +124,23 @@ const Game = () => {
   }
 
   return (
-    <div>
-      <h2>遊戲設定</h2>
-      <button onClick={() => navigate('/')}>返回首頁</button>
+    <div className={styles.gameContainer}>
+      <h2 className={styles.headerTitle}>遊戲設定</h2>
+      <button onClick={() => navigate('/')} className={styles.button}>返回首頁</button>
 
       {/* New Game Form */}
       <div>
         <h3>新增遊戲</h3>
         <form onSubmit={handleNewGameSubmit}>
           <div>
-            {/* <input
-              type="number"
-              placeholder="遊戲編號"
-              value={newGame.gameNumber}
-              onChange={(e) => setNewGame({...newGame, gameNumber: e.target.value})}
-              className="border p-2 rounded"
-              required
-            /> */}
             <input
               type="text"
               placeholder="遊戲名稱"
               value={newGame.gameName}
               onChange={(e) => setNewGame({ ...newGame, gameName: e.target.value })}
               required
+              onInvalid={(e) => e.target.setCustomValidity('請填寫遊戲名稱')}
+              onInput={(e) => e.target.setCustomValidity('')} // Reset message when user starts typing
             />
             <input
               type="number"
@@ -153,6 +148,8 @@ const Game = () => {
               value={newGame.creditNeeded}
               onChange={(e) => setNewGame({ ...newGame, creditNeeded: e.target.value })}
               required
+              onInvalid={(e) => e.target.setCustomValidity('請填寫所需代碼')}
+              onInput={(e) => e.target.setCustomValidity('')} // Reset message when user starts typing
             />
             <input
               type="number"
@@ -160,29 +157,31 @@ const Game = () => {
               value={newGame.ticketWon}
               onChange={(e) => setNewGame({ ...newGame, ticketWon: e.target.value })}
               required
+              onInvalid={(e) => e.target.setCustomValidity('請填寫贏得的票券')}
+              onInput={(e) => e.target.setCustomValidity('')} // Reset message when user starts typing
             />
-            <button type="submit">確認新增</button>
+            <button type="submit" className={styles.button}>確認新增</button>
           </div>
         </form>
       </div>
 
       {/* Games Table */}
       <div>
-        <table>
+        <table className={styles.gameTable}>
           <thead>
             <tr >
-              <th>遊戲編號</th>
-              <th>遊戲名稱</th>
-              <th>所需代碼</th>
-              <th>贏得的票券</th>
-              <th>操作</th>
+              <th className={styles.tableHeader}>遊戲編號</th>
+              <th className={styles.tableHeader}>遊戲名稱</th>
+              <th className={styles.tableHeader}>所需代碼</th>
+              <th className={styles.tableHeader}>贏得的票券</th>
+              <th className={styles.tableHeader}></th>
             </tr>
           </thead>
           <tbody>
             {games.map((game) => (
-              <tr key={game.gameNumber}>
-                <td>{game.gameNumber}</td>
-                <td>
+              <tr key={game.gameNumber} className={styles.tableRow}>
+                <td className={styles.tableCell}>{game.gameNumber}</td>
+                <td className={styles.tableCell}>
                   {editingGame?.gameNumber === game.gameNumber ? (
                     <input
                       type="text"
@@ -191,7 +190,7 @@ const Game = () => {
                     />
                   ) : game.gameName}
                 </td>
-                <td>
+                <td className={styles.tableCell}>
                   {editingGame?.gameNumber === game.gameNumber ? (
                     <input
                       type="number"
@@ -200,7 +199,7 @@ const Game = () => {
                     />
                   ) : game.creditNeeded}
                 </td>
-                <td>
+                <td className={styles.tableCell}>
                   {editingGame?.gameNumber === game.gameNumber ? (
                     <input
                       type="number"
@@ -209,21 +208,16 @@ const Game = () => {
                     />
                   ) : game.ticketWon}
                 </td>
-                <td>
+                <td className={styles.tableCell}>
                   {editingGame?.gameNumber === game.gameNumber ? (
                     <div>
-                      <button onClick={handleUpdateGame}>儲存</button>
-                      <button onClick={() => setEditingGame(null)}>取消</button>
+                      <button onClick={handleUpdateGame} className={styles.button}>儲存</button>
+                      <button onClick={() => setEditingGame(null)} className={styles.button}>取消</button>
                     </div>
                   ) : (
                     <div>
-                      <button onClick={() => {
-                        console.log('Editing game:', game); // Debug log here
-                        setEditingGame(game);
-                      }}>
-                        編輯
-                      </button>
-                      <button onClick={() => setDeleteGameNumber(game.gameNumber)}>刪除</button>
+                      <button onClick={() => { setEditingGame(game); }} className={styles.button}>編輯</button>
+                      <button onClick={() => setDeleteGameNumber(game.gameNumber)} className={styles.button}>刪除</button>
                     </div>
                   )}
                 </td>

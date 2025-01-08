@@ -211,7 +211,7 @@ const PrizePage = () => {
                   ) : (
                     <div>
                       <button onClick={() => setEditingPrize(prize)} className={styles.button}>編輯</button>
-                      <button onClick={() => setDeletePrizeNumber(prize.prizeNumber)} className={styles.button}>刪除</button>
+                      <button onClick={() => setDeletePrizeNumber(prize.prizeNumber)} className={styles.deleteBtn}>刪除</button>
                     </div>
                   )}
                 </td>

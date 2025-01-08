@@ -158,7 +158,7 @@ const Game = () => {
               onChange={(e) => setNewGame({ ...newGame, ticketWon: e.target.value })}
               required
               onInvalid={(e) => e.target.setCustomValidity('請填寫贏得的票券')}
-              onInput={(e) => e.target.setCustomValidity('')} // Reset message when user starts typing
+              onInput={(e) => e.target.setCustomValidity('')}
             />
             <button type="submit" className={styles.button}>確認新增</button>
           </div>
@@ -217,7 +217,7 @@ const Game = () => {
                   ) : (
                     <div>
                       <button onClick={() => { setEditingGame(game); }} className={styles.button}>編輯</button>
-                      <button onClick={() => setDeleteGameNumber(game.gameNumber)} className={styles.button}>刪除</button>
+                      <button onClick={() => setDeleteGameNumber(game.gameNumber)} className={styles.deleteBtn}>刪除</button>
                     </div>
                   )}
                 </td>

@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from '../../styles/Setting.module.css';
 
 const CheckBalance = () => {
   const navigate = useNavigate();
@@ -33,36 +34,24 @@ const CheckBalance = () => {
   };
 
   return (
-    <div className="p-6 max-w-2xl mx-auto">
-      <div className="p-4 border rounded bg-gray-50">
-        <div className="flex justify-between items-center mb-4">
-          <h2 className="text-xl font-bold">查看卡片餘額</h2>
-          <button 
-            onClick={() => navigate('/')}
-            className="px-4 py-2 bg-gray-500 text-white rounded hover:bg-gray-600"
-          >
-            返回首頁
-          </button>
+    <div>
+      <div>
+        <div>
+          <h2 className={styles.headerTitle}>查看卡片餘額</h2>
+          <button onClick={() => navigate('/')} className={styles.button}>返回首頁</button>
         </div>
-        <div className="space-y-2">
+        <div>
           <input
             type="number"
             placeholder="卡號"
             value={checkCardId}
             onChange={(e) => setCheckCardId(e.target.value)}
-            className="w-full p-2 border rounded"
             min="1"
             required
           />
-          <button 
-            className="w-full p-2 bg-yellow-500 text-white rounded hover:bg-yellow-600 disabled:bg-yellow-300"
-            onClick={handleCheckBalance}
-            disabled={!checkCardId}
-          >
-            查詢餘額
-          </button>
+          <button onClick={handleCheckBalance} disabled={!checkCardId} className={styles.button}>查詢餘額</button>
           {showBalance && cardBalance && (
-            <div className="mt-2 p-2 bg-white rounded border">
+            <div style={{ textAlign: 'center' }}>
               <p>代碼餘額: {cardBalance.creditBalance}</p>
               <p>票券餘額: {cardBalance.ticketBalance}</p>
             </div>
@@ -71,7 +60,7 @@ const CheckBalance = () => {
       </div>
 
       {error && (
-        <div className="mt-4 p-3 bg-red-100 border border-red-400 text-red-700 rounded">
+        <div style={{ textAlign: 'center' }}>
           {error}
         </div>
       )}

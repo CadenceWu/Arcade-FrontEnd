@@ -1,24 +1,21 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from '../../styles/Setting.module.css';
 
 const MessageDialog = ({ message, type, onClose }) => {
   if (!message) return null;
 
   const isError = type === 'error';
-  
+
   return (
-    <div className="backdrop">
-      <div className={`modal ${type}-modal`}>
-        <h3>{isError ? '錯誤提示' : '成功提示'}</h3>
+    <div className={styles.backdrop}>
+      <div className={styles.modal}>
+        <h3>{isError ? '錯誤提示' : '成功!!!!'}</h3>
         <p>{message}</p>
-        <div className="button-container">
-          <button onClick={onClose} className={`ok-button ${type}-button`}>確定</button>
+        <div className={styles['button-container']}>
+          <button onClick={onClose} className={styles.button}>確定</button>
         </div>
       </div>
-
-      <style jsx>{`
-        /* ... (keeping existing styles) ... */
-      `}</style>
     </div>
   );
 };
@@ -29,10 +26,41 @@ const TransferBalance = () => {
   const [targetCardId, setTargetCardId] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
+  const [cards, setCards] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchCards = async () => {
+    try {
+      const response = await fetch('http://localhost:8080/api/cards');
+      if (!response.ok) {
+        throw new Error('Failed to fetch cards');
+      }
+      const data = await response.json();
+      setCards(data);
+      setLoading(false);
+    } catch (err) {
+      setError('Failed to fetch cards. Please try again later.');
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchCards();
+  }, [success]); // Refetch cards when a transfer is successful
 
   const validateTransfer = () => {
-    if (!sourceCardId || !targetCardId) {
+    if (!sourceCardId && !targetCardId) {
       setError('請輸入來源卡號和目標卡號');
+      return false;
+    }
+
+    if (!sourceCardId) {
+      setError('請輸入來源卡號');
+      return false;
+    }
+
+    if (!targetCardId) {
+      setError('請輸入目標卡號');
       return false;
     }
 
@@ -69,10 +97,11 @@ const TransferBalance = () => {
       if (!response.ok) {
         throw new Error(data || `轉換失敗: ${response.status}`);
       }
-      
+
       setSuccess(`${type === 'Credits' ? '代碼' : '票券'}轉換成功！`);
       setSourceCardId('');
       setTargetCardId('');
+      // Cards will be refetched due to success state change in useEffect
     } catch (err) {
       setError(err.message);
     }
@@ -102,8 +131,8 @@ const TransferBalance = () => {
     <div>
       <div>
         <div>
-          <h2>轉換代碼或票券</h2>
-          <button onClick={() => navigate('/')}>返回首頁</button>
+          <h2 className={styles.headerTitle}>轉換代碼或票券</h2>
+          <button onClick={() => navigate('/')} className={styles.button}>返回首頁</button>
         </div>
         <div>
           <input
@@ -123,15 +152,15 @@ const TransferBalance = () => {
             required
           />
           <div>
-            <button 
+            <button
               onClick={() => handleTransfer('Credits')}
-              disabled={!sourceCardId || !targetCardId || sourceCardId === targetCardId}
+              className={styles.button}
             >
               轉換代碼
             </button>
-            <button 
+            <button
               onClick={() => handleTransfer('Tickets')}
-              disabled={!sourceCardId || !targetCardId || sourceCardId === targetCardId}
+              className={styles.button}
             >
               轉換票券
             </button>
@@ -139,12 +168,35 @@ const TransferBalance = () => {
         </div>
       </div>
 
+      {loading ? (
+        <div>載入中...</div>
+      ) : (
+        <div className={styles.cardsContainer}>
+          {cards.map(card => (
+            <div key={card.cardId} className={styles.card}>
+              <div>
+                <h3>Card #{card.cardId}</h3>
+              </div>
+              <div>
+                <div>
+                  <span>代碼:</span>
+                  <span>{card.creditBalance}</span>
+                  <span>&nbsp;&nbsp;</span>
+                  <span>票券:</span>
+                  <span>{card.ticketBalance}</span>
+                </div>
+              </div>
+            </div>
+          ))}
+        </div>
+      )}
+
       <MessageDialog
         message={error}
         type="error"
         onClose={() => setError('')}
       />
-      
+
       <MessageDialog
         message={success}
         type="success"

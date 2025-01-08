@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import styles from '../styles/Setting.module.css';
 
 const MessageDialog = ({ message, type, onClose }) => {
   if (!message) return null;
@@ -6,16 +7,16 @@ const MessageDialog = ({ message, type, onClose }) => {
   const isError = type === 'error';
 
   return (
-    <div className="backdrop" onClick={(e) => e.stopPropagation()}>
-      <div className={`modal ${type}-modal`}>
+    <div className={styles.backdrop} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modal}>
         <h3>{isError ? '錯誤' : ''}</h3>
         <p>{message}</p>
-        <div className="button-container">
+        <div className={styles['button-container']}>
           <button onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             onClose();
-          }} className={`ok-button ${type}-button`}>確定</button>
+          }} className={styles['cancel-button']}>確定</button>
         </div>
       </div>
     </div>
@@ -26,13 +27,13 @@ const ConfirmDialog = ({ isOpen, onClose, onYes, onNo }) => {
   if (!isOpen) return null;
 
   return (
-    <div className="backdrop">
-      <div className="modal">
+    <div className={styles.backdrop}>
+      <div className={styles.modal}>
         <h3>是否贏得遊戲</h3>
-        <div className="button-container">
-          <button onClick={onNo}>否</button>
-          <button onClick={onYes}>是</button>
-          <button onClick={onClose}>取消</button>
+        <div className={styles['button-container']}>
+          <button onClick={onNo} className={styles.button}>否</button>
+          <button onClick={onYes} className={styles.button}>是</button>
+          <button onClick={onClose} className={styles.button}>取消</button>
         </div>
       </div>
     </div>
@@ -159,7 +160,7 @@ const ArcadePlayGame = () => {
   if (loading) {
     return (
       <div className="loading-container">
-        <div>Loading games...</div>
+        <div>載入中...</div>
       </div>
     );
   }
@@ -173,14 +174,14 @@ const ArcadePlayGame = () => {
       )}
 
       <div>
-        <h1>遊戲列表</h1>
+        <h2 style={{ textAlign: 'center' }}>遊戲列表</h2>
       </div>
 
       <div>
         <div>
           <div>
             {games.map(game => (
-              <div key={game.gameNumber} className="card">
+              <div key={game.gameNumber} className={styles.chooseGame}>
                 <h3>{game.gameName}</h3>
                 <p>遊戲編號: #{game.gameNumber}</p>
                 <p>需要代碼: {game.creditNeeded}</p>
@@ -204,13 +205,22 @@ const ArcadePlayGame = () => {
         </div>
 
         <div>
-          <h2>卡片餘額</h2>
-          <div>
+          <h2 style={{ textAlign: 'center'}}>卡片餘額</h2>
+          <div className={styles.cardsContainer}>
             {cards.map(card => (
-              <div key={card.cardId} className="card">
-                <h3>卡片 #{card.cardId}</h3>
-                <p>代碼餘額: {card.creditBalance}</p>
-                <p>票券餘額: {card.ticketBalance}</p>
+              <div key={card.cardId} className={styles.card}>
+                <div>
+                  <h3>Card #{card.cardId}</h3>
+                </div>
+                <div>
+                  <div>
+                    <span>代碼:</span>
+                    <span>{card.creditBalance}</span>
+                    <span>&nbsp;&nbsp;</span>
+                    <span>票券:</span>
+                    <span>{card.ticketBalance}</span>
+                  </div>
+                </div>
               </div>
             ))}
           </div>

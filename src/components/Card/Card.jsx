@@ -1,32 +1,33 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from '../../styles/Setting.module.css';
 
 const ConfirmDialog = ({ isOpen, onClose, onConfirm, message }) => {
   if (!isOpen) return null;
-
   return (
-    <div className="backdrop">
-      <div className="modal">
+    <div className={styles.backdrop}>
+      <div className={styles.modal}>
         <h3>確認刪除</h3>
         <p>{message}</p>
-        <div className="button-container">
-          <button onClick={onClose} className="cancel-button">取消</button>
-          <button onClick={onConfirm} className="confirm-button">確認刪除</button>
+        <div className={styles['button-container']}>
+          <button onClick={onClose} className={styles['cancel-button']}>取消</button>
+          <button onClick={onConfirm} className={styles['confirm-button']}>確認刪除</button>
         </div>
       </div>
     </div>
   );
 };
+
 const ErrorDialog = ({ message, onClose }) => {
   if (!message) return null;
 
   return (
-    <div className="backdrop">
-      <div className="modal error-modal">
+    <div className={styles.backdrop}>
+      <div className={styles.modal}>
         <h3>錯誤提示</h3>
         <p>{message}</p>
-        <div className="button-container">
-          <button onClick={onClose} className="ok-button">確定</button>
+        <div className={styles['button-container']}>
+          <button onClick={onClose} className={styles['cancel-button']}>確定</button>
         </div>
       </div>
     </div>
@@ -36,11 +37,10 @@ const ErrorDialog = ({ message, onClose }) => {
 const Card = () => {
   const navigate = useNavigate();
   const [cards, setCards] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [creditAmounts, setCreditAmounts] = useState({});
   const [deleteCardId, setDeleteCardId] = useState(null);
-  const [feedbackMessage, setFeedbackMessage] = useState(null);
+  const [loading, setLoading] = useState(true); // Added loading state
 
   useEffect(() => {
     fetchCards();
@@ -54,9 +54,11 @@ const Card = () => {
       }
       const data = await response.json();
       setCards(data);
-      setLoading(false);
+      setError(null); // Clear any existing errors
     } catch (err) {
+      console.error('Error fetching cards:', err);
       setError('Failed to fetch cards. Please try again later.');
+    } finally {
       setLoading(false);
     }
   };
@@ -192,30 +194,22 @@ const Card = () => {
     }
   };
 
-  if (loading) {
-    return (
-      <div>
-        <p>Loading cards...</p>
-      </div>
-    );
-  }
-
   return (
     <div>
-      <div>
-        <h1>遊戲卡管理</h1>
+      <div className={styles.gameContainer}>
+        <h1 className={styles.headerTitle}>遊戲卡管理</h1>
         <div>
-          <button onClick={() => navigate('/')}>返回首頁</button>
-          <button onClick={addNewCard}>新增遊戲卡</button>
+          <button onClick={() => navigate('/')} className={styles.button}>返回首頁</button>
+          <button onClick={addNewCard} className={styles.button}>新增遊戲卡</button>
         </div>
       </div>
 
       <div>
         {cards.map(card => (
-          <div key={card.cardId} className="card">
+          <div key={card.cardId} className={styles.card}>
             <div>
               <h3>Card #{card.cardId}</h3>
-              <button onClick={() => setDeleteCardId(card.cardId)}>刪除</button>
+              <button onClick={() => setDeleteCardId(card.cardId)} className={styles.deleteBtn}>刪除</button>
             </div>        
             <div>
               <div>
@@ -229,8 +223,8 @@ const Card = () => {
 
             <div>
               <div>
-                <button onClick={() => addCredits(card.cardId, 1)}>加入代碼</button>
-                <button onClick={() => decrementCredits(card.cardId, 1)}>減少代碼</button>
+                <button onClick={() => addCredits(card.cardId, 1)} className={styles.button}>+1代碼</button>
+                <button onClick={() => decrementCredits(card.cardId, 1)} className={styles.button}>-1代碼</button>
               </div>
               
               <div>
@@ -241,8 +235,8 @@ const Card = () => {
                   placeholder="輸入代碼"
                   min="1"
                 />
-                <button onClick={() => handleCustomCredits(card.cardId, 'add')}>加入</button>
-                <button onClick={() => handleCustomCredits(card.cardId, 'decrease')}>減少</button>
+                <button onClick={() => handleCustomCredits(card.cardId, 'add')} className={styles.button}>加入</button>
+                <button onClick={() => handleCustomCredits(card.cardId, 'decrease')} className={styles.button}>減少</button>
               </div>
             </div>
           </div>

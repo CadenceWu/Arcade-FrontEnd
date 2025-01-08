@@ -44,10 +44,10 @@ body {
 
 /* Header Image */
 .header-image {
-  width: 100px; /* Adjust width as needed */
+  width: 80px; /* Adjust width as needed */
   height: auto; /* Maintain aspect ratio */
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.8); /* Optional glowing effect */
-  margin-right:0px;
+  margin-left:50px;
 }
 
 

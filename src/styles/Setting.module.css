@@ -179,7 +179,7 @@ p {
 .card {
   border: 2px solid rgb(85, 206, 95); /* Lighter blue border */
   border-radius: 10px;
-  padding: 2px;
+  padding: 5px;
   margin: 10px;
   text-align: center;
   max-width: 280px;
@@ -201,7 +201,7 @@ p {
   color: #fff; /* White text color */
 }
 
-select {
+.select {
   font-family: 'Press Start 2P', Arial, sans-serif;
   font-size: 0.9em;
   color: #fff;
@@ -214,18 +214,41 @@ select {
   margin: 10px 0;
   box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
   cursor: pointer;
-  appearance: none; /* Removes default browser styles */
   text-align: center;
   text-align-last: center; /* Centers selected text */
   transition: all 0.3s ease;
 }
 
-select:hover {
+.select:hover {
   border-color: #ff0;
   box-shadow: 0 0 15px #ff0, 0 0 30px #0ff;
 }
 
-option {
+.selectPrize {
+  font-family: 'Press Start 2P', Arial, sans-serif;
+  font-size: 0.9em;
+  color: #fff;
+  background-color: #1a1a1a;
+  border: 2px solid #0ff;
+  border-radius: 5px;
+  padding: 10px;
+  width: 100%;
+  max-width: 900px;
+  margin: 10px 0;
+  box-shadow: 0 0 10px rgba(0, 255, 255, 0.5);
+  cursor: pointer;
+  text-align: center;
+  text-align-last: center; /* Centers selected text */
+  transition: all 0.3s ease;
+}
+
+.selectPrize:hover {
+  border-color: #ff0;
+  box-shadow: 0 0 15px #ff0, 0 0 30px #0ff;
+}
+
+
+.option {
   background-color: #1a1a1a;
   color: #fff;
   font-family: 'Press Start 2P', Arial, sans-serif;

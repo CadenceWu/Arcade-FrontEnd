@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import { useNavigate } from 'react-router-dom';
 import styles from '../styles/Setting.module.css';
 
 const MessageDialog = ({ message, type, onClose }) => {
@@ -41,6 +42,7 @@ const ConfirmDialog = ({ isOpen, onClose, onYes, onNo }) => {
 };
 
 const ArcadePlayGame = () => {
+  const navigate = useNavigate();
   const [games, setGames] = useState([]);
   const [cards, setCards] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -50,6 +52,8 @@ const ArcadePlayGame = () => {
   const [selectedGame, setSelectedGame] = useState(null);
   const [selectedCardId, setSelectedCardId] = useState(null);
   const [isDialogOpen, setIsDialogOpen] = useState(false);
+  // Add state to track selected cards for each game
+  const [selectedCards, setSelectedCards] = useState({});
 
   useEffect(() => {
     const fetchData = async () => {
@@ -76,7 +80,14 @@ const ArcadePlayGame = () => {
     fetchData();
   }, []);
 
-  const handleYes = async (e, cardId, game) => {
+  const resetSelection = (gameNumber) => {
+    setSelectedCards(prev => ({
+      ...prev,
+      [gameNumber]: ''
+    }));
+  };
+
+  const handleYes = async () => {
     setIsDialogOpen(false);
     try {
       const playResponse = await fetch(`http://localhost:8080/api/terminal/playGame/${selectedCardId}`, {
@@ -100,10 +111,12 @@ const ArcadePlayGame = () => {
       const refreshResponse = await fetch('http://localhost:8080/api/cards');
       const refreshedCards = await refreshResponse.json();
       setCards(refreshedCards);
+      resetSelection(selectedGame.gameNumber);
       setError(null);
     } catch (err) {
       setError(err.message);
       setSuccess('');
+      resetSelection(selectedGame.gameNumber);
     }
   };
 
@@ -130,25 +143,39 @@ const ArcadePlayGame = () => {
       const refreshResponse = await fetch('http://localhost:8080/api/cards');
       const refreshedCards = await refreshResponse.json();
       setCards(refreshedCards);
+      resetSelection(selectedGame.gameNumber);
       setError(null);
     } catch (err) {
       setError(err.message);
       setSuccess('');
+      resetSelection(selectedGame.gameNumber);
     }
   };
 
+  const handleDialogClose = () => {
+    setIsDialogOpen(false);
+    resetSelection(selectedGame.gameNumber);
+  };
 
-  const playGame = async (e, cardId, game) => {
+  const playGame = async (e, game) => {
     e.preventDefault();
+    const cardId = e.target.value;
+    
+    if (!cardId) {
+      return;
+    }
+
     const selectedCard = cards.find(card => card.cardId === parseInt(cardId));
 
     if (!selectedCard) {
       setError('請選擇卡片');
+      resetSelection(game.gameNumber);
       return;
     }
 
     if (selectedCard.creditBalance < game.creditNeeded) {
       setError(`卡片 ${cardId} 代碼不足`);
+      resetSelection(game.gameNumber);
       return;
     }
 
@@ -179,6 +206,7 @@ const ArcadePlayGame = () => {
 
       <div>
         <div>
+          <button onClick={() => navigate('/')} className={styles.button}>返回首頁</button>
           <div>
             {games.map(game => (
               <div key={game.gameNumber} className={styles.chooseGame}>
@@ -188,10 +216,17 @@ const ArcadePlayGame = () => {
                 <p>可贏票券: {game.ticketWon}</p>
                 <div>
                   <select
-                    onChange={(e) => playGame(e, e.target.value, game)}
-                    defaultValue=""
+                    className={styles.select}
+                    value={selectedCards[game.gameNumber] || ''}
+                    onChange={(e) => {
+                      setSelectedCards(prev => ({
+                        ...prev,
+                        [game.gameNumber]: e.target.value
+                      }));
+                      playGame(e, game);
+                    }}
                   >
-                    <option value="" disabled>選擇要使用的卡片</option>
+                    <option value="" className={styles.option}>選擇要使用的卡片</option>
                     {cards.map(card => (
                       <option key={card.cardId} value={card.cardId}>
                         卡片 #{card.cardId} (代碼: {card.creditBalance} / 票券: {card.ticketBalance})
@@ -230,19 +265,30 @@ const ArcadePlayGame = () => {
       <MessageDialog
         message={error}
         type="error"
-        onClose={() => setError('')}
+        onClose={() => {
+          setError('');
+          if (selectedGame) {
+            resetSelection(selectedGame.gameNumber);
+          }
+        }}
       />
 
       <MessageDialog
         message={success}
         type="success"
-        onClose={() => setSuccess('')}
+        onClose={() => {
+          setSuccess('');
+          if (selectedGame) {
+            resetSelection(selectedGame.gameNumber);
+          }
+        }}
       />
+      
       <ConfirmDialog
         isOpen={isDialogOpen}
         onYes={handleYes}
         onNo={handleNo}
-        onClose={() => setIsDialogOpen(false)}
+        onClose={handleDialogClose}
       />
     </div>
   );

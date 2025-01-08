@@ -5,16 +5,28 @@ import arcadeImg from './Arcade.jpg';
 import gameCard from './GameCard.svg';
 import PlayGame from './PlayGame.svg';
 import ArcadeMachine from './ArcadeMachine.svg';
+import { useEffect } from 'react';
+import { gsap } from 'gsap';
 
 const HomePage = () => {
   const [userRole, setUserRole] = useState('user'); // Default role is 'user'
+
+  useEffect(() => {
+    gsap.to('.header-image', {
+      rotation: 360,
+      scale: 1.2,
+      repeat: -1,
+      yoyo: true,
+      duration: 3,
+    });
+  }, []);
 
   //Takes two props
   const MenuSection = ({ title, children, imageSrc }) => (
     <div className="menu-section">
       <div className="title-with-image">
         <h2 className="menu-title">{title}</h2>
-        {imageSrc && <img src={imageSrc} className="arcade-image" alt={`${title} Image`} />}
+        {imageSrc && <img src={imageSrc} className="arcade-image" alt={`${title} Image`} />}     
       </div>
       <div className="menu-buttons">{children}</div>
     </div>

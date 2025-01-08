@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
+import styles from '../../styles/Setting.module.css';
 
 const MessageDialog = ({ message, type, onClose }) => {
   if (!message) return null;
@@ -7,16 +8,16 @@ const MessageDialog = ({ message, type, onClose }) => {
   const isError = type === 'error';
 
   return (
-    <div className="backdrop" onClick={(e) => e.stopPropagation()}>
-      <div className={`modal ${type}-modal`}>
+    <div className={styles.backdrop} onClick={(e) => e.stopPropagation()}>
+      <div className={styles.modal}>
         <h3>{isError ? '錯誤' : ''}</h3>
         <p>{message}</p>
-        <div className="button-container">
+        <div className={styles['button-container']}>
           <button onClick={(e) => {
             e.preventDefault();
             e.stopPropagation();
             onClose();
-          }} className={`ok-button ${type}-button`}>確定</button>
+          }} className={styles['cancel-button']}>確定</button>
         </div>
       </div>
     </div>
@@ -62,8 +63,16 @@ const RequestPrize = () => {
     setError('');
     setSuccess('');
 
-    if (!selectedCard || !selectedPrize) {
+    if (!selectedCard && !selectedPrize) {
       setError('請選擇卡片和獎品');
+      return;
+    }
+    if(!selectedCard){
+      setError('請選擇卡片');
+      return;
+    }
+    if(!selectedPrize){
+      setError('請選擇獎品');
       return;
     }
 
@@ -113,14 +122,15 @@ const RequestPrize = () => {
   return (
     <div>
       <div>
-        <div>
-          <h2>兌換獎品</h2>
-          <button onClick={() => navigate('/')}>返回首頁</button>
+        <div className={styles.gameContainer}>
+          <h2 className={styles.headerTitle}>兌換獎品</h2>
+          <button onClick={() => navigate('/')} className={styles.button}>返回首頁</button>
         </div>
         <div>
           <div>
-            <label>選擇卡片</label>
+            <label >選擇卡片: </label>
             <select
+              className={styles.selectPrize}
               value={selectedCard}
               onChange={(e) => setSelectedCard(e.target.value)}
             >
@@ -134,8 +144,9 @@ const RequestPrize = () => {
           </div>
 
           <div>
-            <label>選擇獎品</label>
+            <label>選擇獎品: </label>
             <select
+              className={styles.selectPrize}
               value={selectedPrize}
               onChange={(e) => setSelectedPrize(e.target.value)}
             >
@@ -146,35 +157,29 @@ const RequestPrize = () => {
                 </option>
               ))}
             </select>
+            <button onClick={handleRequestPrize} className={styles.deleteBtn}>兌換獎品</button>
           </div>
-
-          <button
-            onClick={handleRequestPrize}
-            disabled={!selectedCard || !selectedPrize}
-          >
-            兌換獎品
-          </button>
         </div>
       </div>
 
       {/* Prizes Table */}
       <div>
-        <table>
+        <table className={styles.gameTable}>
           <thead>
             <tr>
-              <th>獎品編號</th>
-              <th>獎品名稱</th>
-              <th>所需兌換票券</th>
-              <th>剩餘數量</th>
+              <th className={styles.tableHeader}>獎品編號</th>
+              <th className={styles.tableHeader}>獎品名稱</th>
+              <th className={styles.tableHeader}>所需兌換票券</th>
+              <th className={styles.tableHeader}>剩餘數量</th>
             </tr>
           </thead>
           <tbody>
             {prizes.map((prize) => (
               <tr key={prize.prizeNumber}>
-                <td>{prize.prizeNumber}</td>
-                <td>{prize.prizeName}</td>
-                <td>{prize.requiredTickets}</td>
-                <td>{prize.stockQuantity}</td>
+                <td className={styles.tableCell}>{prize.prizeNumber}</td>
+                <td className={styles.tableCell}>{prize.prizeName}</td>
+                <td className={styles.tableCell}>{prize.requiredTickets}</td>
+                <td className={styles.tableCell}>{prize.stockQuantity}</td>
               </tr>
             ))}
           </tbody>

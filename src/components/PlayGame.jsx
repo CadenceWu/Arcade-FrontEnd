@@ -201,7 +201,7 @@ const ArcadePlayGame = () => {
       )}
 
       <div>
-        <h2 style={{ textAlign: 'center' }}>遊戲列表</h2>
+        <h2 className={styles.headerTitle}>遊戲列表</h2>
       </div>
 
       <div>
@@ -219,10 +219,7 @@ const ArcadePlayGame = () => {
                     className={styles.select}
                     value={selectedCards[game.gameNumber] || ''}
                     onChange={(e) => {
-                      setSelectedCards(prev => ({
-                        ...prev,
-                        [game.gameNumber]: e.target.value
-                      }));
+                      setSelectedCards(prev => ({...prev,[game.gameNumber]: e.target.value}));
                       playGame(e, game);
                     }}
                   >

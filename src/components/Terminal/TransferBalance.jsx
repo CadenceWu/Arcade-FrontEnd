@@ -24,6 +24,7 @@ const TransferBalance = () => {
   const navigate = useNavigate();
   const [sourceCardId, setSourceCardId] = useState('');
   const [targetCardId, setTargetCardId] = useState('');
+  const [amount, setAmount] = useState('');
   const [error, setError] = useState('');
   const [success, setSuccess] = useState('');
   const [cards, setCards] = useState([]);
@@ -46,14 +47,9 @@ const TransferBalance = () => {
 
   useEffect(() => {
     fetchCards();
-  }, [success]); // Refetch cards when a transfer is successful
+  }, [success]);
 
   const validateTransfer = () => {
-    if (!sourceCardId && !targetCardId) {
-      setError('請輸入來源卡號和目標卡號');
-      return false;
-    }
-
     if (!sourceCardId) {
       setError('請輸入來源卡號');
       return false;
@@ -64,8 +60,19 @@ const TransferBalance = () => {
       return false;
     }
 
+    if (!amount || amount <= 0) {
+      setError('請輸入有效的轉換數量');
+      return false;
+    }
+
     if (sourceCardId === targetCardId) {
       setError('來源卡號和目標卡號不能相同');
+      return false;
+    }
+
+    const sourceCard = cards.find(card => card.cardId === parseInt(sourceCardId));
+    if (!sourceCard) {
+      setError('來源卡片不存在');
       return false;
     }
 
@@ -88,7 +95,8 @@ const TransferBalance = () => {
         },
         body: JSON.stringify({
           sourceCardId: parseInt(sourceCardId),
-          targetCardId: parseInt(targetCardId)
+          targetCardId: parseInt(targetCardId),
+          amount: parseInt(amount)
         })
       });
 
@@ -101,29 +109,9 @@ const TransferBalance = () => {
       setSuccess(`${type === 'Credits' ? '代碼' : '票券'}轉換成功！`);
       setSourceCardId('');
       setTargetCardId('');
-      // Cards will be refetched due to success state change in useEffect
+      setAmount('');
     } catch (err) {
       setError(err.message);
-    }
-  };
-
-  const handleSourceCardChange = (e) => {
-    const value = e.target.value;
-    setSourceCardId(value);
-    if (value && value === targetCardId) {
-      setError('來源卡號和目標卡號不能相同');
-    } else {
-      setError('');
-    }
-  };
-
-  const handleTargetCardChange = (e) => {
-    const value = e.target.value;
-    setTargetCardId(value);
-    if (value && value === sourceCardId) {
-      setError('來源卡號和目標卡號不能相同');
-    } else {
-      setError('');
     }
   };
 
@@ -139,7 +127,7 @@ const TransferBalance = () => {
             type="number"
             placeholder="來源卡號"
             value={sourceCardId}
-            onChange={handleSourceCardChange}
+            onChange={(e) => setSourceCardId(e.target.value)}
             min="1"
             required
           />
@@ -147,24 +135,20 @@ const TransferBalance = () => {
             type="number"
             placeholder="目標卡號"
             value={targetCardId}
-            onChange={handleTargetCardChange}
+            onChange={(e) => setTargetCardId(e.target.value)}
             min="1"
             required
           />
-          <div>
-            <button
-              onClick={() => handleTransfer('Credits')}
-              className={styles.button}
-            >
-              轉換代碼
-            </button>
-            <button
-              onClick={() => handleTransfer('Tickets')}
-              className={styles.button}
-            >
-              轉換票券
-            </button>
-          </div>
+          <input
+            type="number"
+            placeholder="轉換數量"
+            value={amount}
+            onChange={(e) => setAmount(e.target.value)}
+            min="1"
+            required
+          />
+          <button onClick={() => handleTransfer('Credits')} className={styles.button}>轉換代碼</button>
+          <button onClick={() => handleTransfer('Tickets')} className={styles.button}>轉換票券</button>
         </div>
       </div>
 

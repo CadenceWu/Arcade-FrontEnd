@@ -50,18 +50,20 @@ const Game = () => {
       console.error('Error fetching games:', err);
     }
   };
+
   const getNextGameNumber = () => {
     if (games.length === 0) return 1;
+    //find the largest number in the array
     const maxGameNumber = Math.max(...games.map(game => parseInt(game.gameNumber)));
     return maxGameNumber + 1;
   };
 
   const handleNewGameSubmit = async (e) => {
-    e.preventDefault();
+    e.preventDefault(); //stop the form from reloading the page when submitted.
     try {
       const gameWithNumber = {
         ...newGame,
-        gameNumber: getNextGameNumber().toString()
+        gameNumber: getNextGameNumber()
       };
 
       const response = await fetch('http://localhost:8080/api/games', {
@@ -149,7 +151,7 @@ const Game = () => {
               onChange={(e) => setNewGame({ ...newGame, creditNeeded: e.target.value })}
               required
               onInvalid={(e) => e.target.setCustomValidity('請填寫所需代碼')}
-              onInput={(e) => e.target.setCustomValidity('')} // Reset message when user starts typing
+              onInput={(e) => e.target.setCustomValidity('')}
             />
             <input
               type="number"
@@ -182,6 +184,7 @@ const Game = () => {
               <tr key={game.gameNumber} className={styles.tableRow}>
                 <td className={styles.tableCell}>{game.gameNumber}</td>
                 <td className={styles.tableCell}>
+                  {/*optional changing. It safely accesses gameNumber even if editingGame is null or undefined*/}
                   {editingGame?.gameNumber === game.gameNumber ? (
                     <input
                       type="text"
@@ -227,9 +230,11 @@ const Game = () => {
         </table>
       </div>
 
-      {/* Custom Confirmation Dialog */}
+      {/* Custom Confirmation Dialog.*/}
+      {/* {deleteGameNumber !== null} set the value of the isOpen prop*/}
+      {/* When clicking 刪除button, deleteGameNumber gets set to the gameNumber(is not null)*/}
       <ConfirmDialog
-        isOpen={deleteGameNumber !== null}
+        isOpen={deleteGameNumber !== null} 
         onClose={() => setDeleteGameNumber(null)}
         onConfirm={() => handleDelete(deleteGameNumber)}
         message="您確定要刪除這筆遊戲資料嗎？此操作無法復原。"

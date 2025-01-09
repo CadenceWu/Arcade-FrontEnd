@@ -1,16 +1,17 @@
 import React, { useState } from 'react';
 import { Link } from 'react-router-dom';
 import '../styles/HomePage.css';
-import arcadeImg from './Arcade.jpg';
-import gameCard from './GameCard.svg';
-import PlayGame from './PlayGame.svg';
-import ArcadeMachine from './ArcadeMachine.svg';
+import arcadeImg from './Image/Arcade.jpg';
+import gameCard from './Image/GameCard.svg';
+import playGame from './Image/PlayGame.svg';
+import arcadeMachine from './Image/ArcadeMachine.svg';
 import { useEffect } from 'react';
 import { gsap } from 'gsap';
 
 const HomePage = () => {
-  const [userRole, setUserRole] = useState('user'); // Default role is 'user'
+  const [userRole, setUserRole] = useState('user'); 
 
+  //Animation
   useEffect(() => {
     gsap.to('.header-image', {
       rotation: 360,
@@ -21,7 +22,7 @@ const HomePage = () => {
     });
   }, []);
 
-  //Takes two props
+  
   const MenuSection = ({ title, children, imageSrc }) => (
     <div className="menu-section">
       <div className="title-with-image">
@@ -42,7 +43,7 @@ const HomePage = () => {
       <header className="home-header">
         <div className="header-content">
           <h1 className="home-title">歡迎來到遊戲場</h1>
-          <img src={ArcadeMachine} alt="Arcade Machine" className="header-image" />
+          <img src={arcadeMachine} alt="Arcade Machine" className="header-image" />
         </div>
       </header>
 
@@ -77,7 +78,7 @@ const HomePage = () => {
 
 
         {/* Gameplay Section */}
-        <MenuSection title="遊戲操作、獎品兌換" imageSrc={PlayGame}>
+        <MenuSection title="遊戲操作、獎品兌換" imageSrc={playGame}>
           <PrimaryButton to="/playGame">選擇遊戲</PrimaryButton>
           <PrimaryButton to="/request-prize">兌換獎品</PrimaryButton>
         </MenuSection>

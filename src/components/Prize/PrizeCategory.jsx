@@ -22,7 +22,6 @@ const ConfirmDialog = ({ isOpen, onClose, onConfirm, message }) => {
 const PrizePage = () => {
   const navigate = useNavigate();
   const [prizes, setPrizes] = useState([]);
-  const [loading, setLoading] = useState(true);
   const [error, setError] = useState(null);
   const [editingPrize, setEditingPrize] = useState(null);
   const [deletePrizeNumber, setDeletePrizeNumber] = useState(null);
@@ -44,10 +43,8 @@ const PrizePage = () => {
       }
       const data = await response.json();
       setPrizes(data);
-      setLoading(false);
     } catch (err) {
       setError('Failed to fetch prizes. Please try again later.');
-      setLoading(false);
       console.error('Error fetching prizes:', err);
     }
   };
@@ -118,6 +115,10 @@ const PrizePage = () => {
       console.error('Error deleting prize:', err);
     }
   };
+  
+  if (error) {
+    return <div>{error}</div>;
+  }
 
   return (
     <div className={styles.gameContainer}>

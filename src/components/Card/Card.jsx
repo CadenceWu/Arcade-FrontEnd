@@ -40,7 +40,7 @@ const Card = () => {
   const [error, setError] = useState(null);
   const [creditAmounts, setCreditAmounts] = useState({});
   const [deleteCardId, setDeleteCardId] = useState(null);
-  const [loading, setLoading] = useState(true); // Added loading state
+
 
   useEffect(() => {
     fetchCards();
@@ -54,13 +54,11 @@ const Card = () => {
       }
       const data = await response.json();
       setCards(data);
-      setError(null); // Clear any existing errors
+      setError(null); // Ensures the error message is cleared when the fetch is successful.
     } catch (err) {
       console.error('Error fetching cards:', err);
       setError('Failed to fetch cards. Please try again later.');
-    } finally {
-      setLoading(false);
-    }
+    } 
   };
 
   const getNextCardNumber = () => {
@@ -148,9 +146,7 @@ const Card = () => {
       }
 
       const updatedCard = await response.json();
-      setCards(cards.map(card => 
-        card.cardId === cardId ? updatedCard : card
-      ));
+      setCards(cards.map(card => card.cardId === cardId ? updatedCard : card));
       setCreditAmounts(prev => ({ ...prev, [cardId]: '' }));
       setError(null);
     } catch (err) {
@@ -177,10 +173,7 @@ const Card = () => {
   };
 
   const handleCreditAmountChange = (cardId, value) => {
-    setCreditAmounts(prev => ({
-      ...prev,
-      [cardId]: value
-    }));
+    setCreditAmounts(prev => ({...prev, [cardId]: value}));
   };
 
   const handleCustomCredits = (cardId, operation) => {

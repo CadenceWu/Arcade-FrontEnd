@@ -11,7 +11,7 @@ import RequestPrize from './components/Terminal/RequestPrize';
 
 const App = () => {
   return (
-    <BrowserRouter basename="/Arcade-FrontEnd">
+    <BrowserRouter basename="/">
       <Routes>
         <Route path="/" element={<HomePage />} />
         <Route path="/games" element={<Game />} />

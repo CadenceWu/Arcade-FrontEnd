@@ -25,7 +25,7 @@
 	- 必須有足夠的票券才可兌換該獎品。
 
 
-- **Tech Stack**: React+Vite, Javascript, HTML, CSS
+# Tech Stack**: React+Vite, Javascript, HTML, CSS
 
 DEMO: https://arcade-7684f.web.app/
 

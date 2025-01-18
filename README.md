@@ -25,7 +25,7 @@
 	- 必須有足夠的票券才可兌換該獎品。
 
 
-https://arcade-7684f.web.app/
+DEMO: https://arcade-7684f.web.app/
 
 # React + Vite
 

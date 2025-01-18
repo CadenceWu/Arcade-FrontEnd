@@ -33,7 +33,7 @@ const HomePage = () => {
     </div>
   );
 
-
+  // 1. 阻止默認的頁面刷新行為, 2. 更新瀏覽器的 URL 為 "/check-balance", 3. 通知 React Router 有路由變化(在 App.js 中設置)
   const PrimaryButton = ({ to, children, className = "" }) => (
     <Link to={to} className={`primary-button ${className}`}>{children}</Link>
   );
@@ -69,7 +69,7 @@ const HomePage = () => {
           </MenuSection>
         )}
 
-        {/* Game Card Section */}
+        {/* Card Section */}
         <MenuSection title="遊戲卡設定" imageSrc={gameCard}>
           <PrimaryButton to="/cards">新增遊戲卡、儲值</PrimaryButton>
           <PrimaryButton to="/transfer">轉換代碼、票券</PrimaryButton>

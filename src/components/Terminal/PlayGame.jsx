@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { useNavigate } from 'react-router-dom';
-import styles from '../styles/Setting.module.css';
+import styles from '../../styles/Setting.module.css';
 
 const MessageDialog = ({ message, type, onClose }) => {
   if (!message) return null;

@@ -76,6 +76,13 @@ const TransferBalance = () => {
       return false;
     }
 
+    // Check target card existence
+    const targetCard = cards.find(card => card.cardId === parseInt(targetCardId));
+    if (!targetCard) {
+      setError('目標卡片不存在');
+      return false;
+    }
+
     return true;
   };
 

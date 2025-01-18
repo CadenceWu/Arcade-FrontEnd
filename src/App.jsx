@@ -4,9 +4,9 @@ import HomePage from './components/HomePage';
 import Game from './components/Game/Game';
 import PrizeCategory from './components/Prize/PrizeCategory';
 import Card from './components/Card/Card';
-import PlayGame from './components/PlayGame';
+import PlayGame from './components/Terminal/PlayGame';
 import TransferBalance from './components/Terminal/TransferBalance';
-import CheckBalance from './components/Terminal/CheckBalance';
+import CheckBalance from './components/Card/CheckBalance';
 import RequestPrize from './components/Terminal/RequestPrize';
 
 const App = () => {

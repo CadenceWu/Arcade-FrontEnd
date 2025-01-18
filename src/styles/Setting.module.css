@@ -98,6 +98,12 @@ input[type="text"], input[type="number"] {
     border-radius: 5px;
     font-family: 'Press Start 2P', Arial, sans-serif;
 }
+
+/* Specific styling for name input */
+.tableCell input[type="text"] {
+    width: 300px; /* Increased width */
+    min-width: 200px; /* Minimum width */
+}
   
   input[type="text"]:focus, input[type="number"]:focus {
     outline: none;

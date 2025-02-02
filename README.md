@@ -31,6 +31,7 @@ React+Vite, Javascript, HTML, CSS
 DEMO: https://arcade-7684f.web.app/
 
 ![Demo of Arcade1](Images/Arcade1.gif)
+![Demo of Arcade2](Images/Arcade2.gif)
 
 # React + Vite
 

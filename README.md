@@ -30,6 +30,8 @@ React+Vite, Javascript, HTML, CSS
 
 DEMO: https://arcade-7684f.web.app/
 
+![Demo of Arcade1](images/Arcade1.gif)
+
 # React + Vite
 
 This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
